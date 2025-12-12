@@ -1,0 +1,66 @@
+<app-sidebar></app-sidebar>
+
+<main class="main-content">
+  <div class="content">
+
+    <!-- Follow-ups Page -->
+    <div class="page-view active" id="follow-ups-page">
+      <h1>Follow-up Requests</h1>
+      <p class="page-subtitle">Students requiring follow-up actions</p>
+
+      <div class="section">
+        <!-- Filter -->
+        <div class="filters-bar">
+          <div class="filter-group">
+            <label>Search</label>
+            <input type="text" placeholder="Student ID or Name..." [(ngModel)]="searchTerm" (ngModelChange)="filterFollowups()">
+          </div>
+          <div class="filter-group">
+            <label>Status</label>
+            <select [(ngModel)]="statusFilter" (ngModelChange)="filterFollowups()">
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="contacted">Contacted</option>
+              <option value="resolved">Resolved</option>
+            </select>
+          </div>
+          <button class="btn-secondary" (click)="resetFilters()">Reset</button>
+        </div>
+
+        <!-- Follow-up List -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Name</th>
+              <th>Reason</th>
+              <th>Date Requested</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let f of filteredFollowups">
+              <td>{{ f.studentId }}</td>
+              <td>{{ f.name }}</td>
+              <td>{{ f.reason }}</td>
+              <td>{{ f.dateRequested }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'pending': f.status === 'pending',
+                  'contacted': f.status === 'contacted',
+                  'resolved': f.status === 'resolved'
+                }">{{ f.status | titlecase }}</span>
+              </td>
+              <td>
+                <button class="btn-sm btn-success" (click)="resolveFollowup(f.studentId)">Resolved</button>
+                <button class="btn-sm btn-warning" (click)="addComment(f.studentId)">Comment</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>

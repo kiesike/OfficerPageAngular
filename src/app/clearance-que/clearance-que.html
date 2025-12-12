@@ -1,0 +1,70 @@
+<app-sidebar></app-sidebar>
+
+<main class="main-content">
+  <div class="content">
+    <div class="page-view active" id="queue-page">
+      <h1>Clearance Queue</h1>
+      <p class="page-subtitle">Review and process student clearance requests</p>
+
+      <div class="section">
+        <!-- Filters -->
+        <div class="filters-bar">
+          <div class="filter-group">
+            <label>Search</label>
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Student ID or Name..." (keyup)="filterQueue()">
+          </div>
+          <div class="filter-group">
+            <label>Program</label>
+            <select [(ngModel)]="programFilter" (change)="filterQueue()">
+              <option value="">All</option>
+              <option value="BSIT">BSIT</option>
+              <option value="BSCS">BSCS</option>
+              <option value="BSCE">BSCE</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Year</label>
+            <select [(ngModel)]="yearFilter" (change)="filterQueue()">
+              <option value="">All</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+          <button class="btn-secondary" (click)="resetFilters()">Reset</button>
+        </div>
+
+        <!-- Queue Table -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Name</th>
+              <th>Program</th>
+              <th>Year</th>
+              <th>College</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of filteredItems">
+              <td>{{ student.studentId }}</td>
+              <td>{{ student.studentName }}</td>
+              <td>{{ student.program }}</td>
+              <td>{{ student.year }}</td>
+              <td>{{ student.college }}</td>
+              <td><span class="badge" [ngClass]="{'pending': student.status==='Pending','approved': student.status==='Approved','rejected': student.status==='Rejected'}">{{ student.status }}</span></td>
+              <td>
+                <button class="btn-sm btn-success" (click)="approveStudent(student.studentId)">Approve</button>
+                <button class="btn-sm btn-warning" (click)="addComment(student.studentId)">Comment</button>
+                <button class="btn-sm btn-danger" (click)="rejectStudent(student.studentId)">Reject</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>

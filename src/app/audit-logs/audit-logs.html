@@ -1,0 +1,78 @@
+<app-sidebar></app-sidebar>
+
+<main class="main-content">
+  <div class="content">
+
+    <!-- Audit Logs Page -->
+    <div class="page-view active" id="audit-logs-page">
+      <h1>Audit Logs</h1>
+      <p class="page-subtitle">Record of all actions and system events</p>
+
+      <div class="section">
+
+        <!-- Filter -->
+        <div class="filters-bar filters-container">
+          <div class="filter-group">
+            <label>Search</label>
+            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterAuditLogs()" placeholder="Search logs...">
+          </div>
+          <div class="filter-group">
+            <label>Action Type</label>
+            <select [(ngModel)]="actionType" (change)="filterAuditLogs()">
+              <option value="">All Actions</option>
+              <option value="Approved">Approvals</option>
+              <option value="Rejected">Rejections</option>
+              <option value="Comment">Comments</option>
+              <option value="Follow-up">Follow-ups</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Date</label>
+            <select [(ngModel)]="dateRange" (change)="filterAuditLogs()">
+              <option value="">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Audit Log Table -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Officer</th>
+              <th>Action</th>
+              <th>Student ID</th>
+              <th>Student Name</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredData">
+              <td>{{ item.date }}</td>
+              <td>{{ item.officer }}</td>
+              <td>
+                <span 
+                  class="badge" 
+                  [ngClass]="{
+                    'approved': item.action.toLowerCase() === 'approved',
+                    'rejected': item.action.toLowerCase() === 'rejected',
+                    'pending': item.action.toLowerCase() === 'follow-up'
+                  }">
+                  {{ item.action }}
+                </span>
+              </td>
+              <td>{{ item.studentId }}</td>
+              <td>{{ item.studentName }}</td>
+              <td>{{ item.comment }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</main>
